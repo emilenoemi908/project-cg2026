@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://c3j83yxm0lipl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gcxnu"]
+size = Vector2(1280, 320)
+
+[node name="cenarioLagoa" type="Node2D" unique_id=835400653]
+
+[node name="ceu" type="ColorRect" parent="." unique_id=281661988]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 1280.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0.7229669, 0.723306, 1)
+
+[node name="agua" type="ColorRect" parent="." unique_id=971960509]
+offset_top = 400.0
+offset_right = 1280.0
+offset_bottom = 720.0
+color = Color(0, 0.32648334, 0.32648334, 1)
+
+[node name="pontoPesca1" type="Marker2D" parent="." unique_id=1519527623]
+position = Vector2(300, 500)
+
+[node name="pontoPesca2" type="Marker2D" parent="." unique_id=613424981]
+position = Vector2(600, 480)
+
+[node name="pontoPesca3" type="Marker2D" parent="." unique_id=1458594907]
+position = Vector2(900, 520)
+
+[node name="limiteAgua" type="StaticBody2D" parent="." unique_id=953688776]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="limiteAgua" unique_id=1451955084]
+position = Vector2(640, 560)
+shape = SubResource("RectangleShape2D_gcxnu")

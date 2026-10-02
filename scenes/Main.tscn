@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://d1bb34jrlc8gk"]
+
+[ext_resource type="PackedScene" uid="uid://c3j83yxm0lipl" path="res://scenes/cenario/cenarioLagoa.tscn" id="1_0bbpv"]
+[ext_resource type="PackedScene" uid="uid://bg75i88b5u080" path="res://scenes/personagem/pescador.tscn" id="2_rarhs"]
+[ext_resource type="PackedScene" uid="uid://cv0lnwaqyn7ls" path="res://scenes/peixes/peixe.tscn" id="3_vcsgt"]
+[ext_resource type="PackedScene" uid="uid://c0ljd1w107aln" path="res://scenes/ui/UIDesafio.tscn" id="4_rarhs"]
+[ext_resource type="AudioStream" uid="uid://bqkl5q7yisvh8" path="res://assets/sons/musica_fundo.mp3" id="5_vcsgt"]
+
+[node name="Main" type="Node2D" unique_id=2109384193]
+
+[node name="cenarioLagoa" parent="." unique_id=835400653 instance=ExtResource("1_0bbpv")]
+
+[node name="Pescador" parent="." unique_id=500540765 instance=ExtResource("2_rarhs")]
+position = Vector2(640, 300)
+
+[node name="peixe" parent="." unique_id=1561372849 instance=ExtResource("3_vcsgt")]
+position = Vector2(300, 500)
+
+[node name="peixe2" parent="." unique_id=1512819805 instance=ExtResource("3_vcsgt")]
+position = Vector2(640, 560)
+
+[node name="peixe3" parent="." unique_id=51914610 instance=ExtResource("3_vcsgt")]
+position = Vector2(950, 520)
+
+[node name="CanvasLayer" parent="." unique_id=1255779012 instance=ExtResource("4_rarhs")]
+
+[node name="MusicaFundo" type="AudioStreamPlayer" parent="." unique_id=416568963]
+stream = ExtResource("5_vcsgt")
+autoplay = true

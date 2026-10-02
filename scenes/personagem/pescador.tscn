@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://bg75i88b5u080"]
+
+[ext_resource type="Script" uid="uid://celtb2glqky78" path="res://scenes/personagem/pescador.gd" id="1_spt4x"]
+[ext_resource type="AudioStream" uid="uid://d37hve4xn2ur4" path="res://assets/sons/som_lancar.ogg" id="2_5h5hq"]
+[ext_resource type="AudioStream" uid="uid://ddsqbx73d3xua" path="res://assets/sons/som_pescar.ogg" id="3_3rf5g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_27as2"]
+size = Vector2(30, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spt4x"]
+size = Vector2(160, 220)
+
+[node name="Pescador" type="CharacterBody2D" unique_id=500540765]
+script = ExtResource("1_spt4x")
+
+[node name="Barco" type="Polygon2D" parent="." unique_id=532269066]
+color = Color(0.54509807, 0.3529412, 0.19607843, 1)
+polygon = PackedVector2Array(-70, -5, -60, 10, -30, 30, 0, 38, 30, 30, 60, 10, 70, -5)
+uv = PackedVector2Array(-84, 3, -10, 3, 20, 0, 91, -2, 19, 39, -24, 41)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1693520053]
+shape = SubResource("RectangleShape2D_27as2")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=905051304]
+offset_left = -15.0
+offset_top = -5.0
+offset_right = 15.0
+offset_bottom = 20.0
+color = Color(0.6375517, 2.3223088e-06, 2.8878452e-07, 1)
+
+[node name="visualRede" type="Polygon2D" parent="." unique_id=995839314]
+color = Color(0.47058824, 0.39215687, 0.27450982, 1)
+polygon = PackedVector2Array(-10, 20, 10, 20, 80, 260, -80, 260)
+
+[node name="areaPesca" type="Area2D" parent="." unique_id=1553656552 groups=["area_pesca"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="areaPesca" unique_id=1404863003]
+position = Vector2(0, 150)
+shape = SubResource("RectangleShape2D_spt4x")
+
+[node name="SomLancar" type="AudioStreamPlayer" parent="." unique_id=1030734480]
+stream = ExtResource("2_5h5hq")
+
+[node name="SomPescar" type="AudioStreamPlayer" parent="." unique_id=733821046]
+stream = ExtResource("3_3rf5g")

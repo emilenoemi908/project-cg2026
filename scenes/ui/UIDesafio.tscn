@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://c0ljd1w107aln"]
+
+[ext_resource type="Script" uid="uid://d11ldc8w43jgr" path="res://scenes/ui/ui_desafio.gd" id="1_eerpw"]
+[ext_resource type="AudioStream" uid="uid://bynscnyptkjlp" path="res://assets/sons/som_certo.ogg" id="2_npewa"]
+[ext_resource type="AudioStream" uid="uid://dg1bumpr0i0qq" path="res://assets/sons/som_errado.ogg" id="3_3nssj"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1255779012]
+script = ExtResource("1_eerpw")
+
+[node name="Panel" type="Panel" parent="." unique_id=1286858439]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -110.0
+offset_right = 200.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LabelPergunta" type="Label" parent="Panel" unique_id=566686677]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 21.0
+offset_bottom = 43.0
+theme_override_font_sizes/font_size = 22
+
+[node name="BotaoA" type="Button" parent="Panel" unique_id=840057240]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 90.0
+offset_right = 130.0
+offset_bottom = 140.0
+
+[node name="BotaoB" type="Button" parent="Panel" unique_id=2026846338]
+layout_mode = 0
+offset_left = 145.0
+offset_top = 90.0
+offset_right = 255.0
+offset_bottom = 140.0
+
+[node name="BotaoC" type="Button" parent="Panel" unique_id=761256550]
+layout_mode = 0
+offset_left = 270.0
+offset_top = 90.0
+offset_right = 380.0
+offset_bottom = 140.0
+
+[node name="LabelFeedback" type="Label" parent="Panel" unique_id=1365896209]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 160.0
+offset_right = 60.0
+offset_bottom = 183.0
+
+[node name="SomCerto" type="AudioStreamPlayer" parent="." unique_id=1185730985]
+stream = ExtResource("2_npewa")
+
+[node name="SomErrado" type="AudioStreamPlayer" parent="." unique_id=151216066]
+stream = ExtResource("3_3nssj")

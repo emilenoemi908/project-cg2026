@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cv0lnwaqyn7ls"]
+
+[ext_resource type="Script" uid="uid://dhbfdlyxl6jkx" path="res://scenes/peixes/Peixe.gd" id="1_v18uc"]
+[ext_resource type="Texture2D" uid="uid://bn1ucmj7fujxm" path="res://scripts/fish_orange.png" id="2_gnh0m"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_27as2"]
+radius = 25.0
+
+[node name="peixe" type="Area2D" unique_id=1561372849]
+script = ExtResource("1_v18uc")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1919760890]
+shape = SubResource("CircleShape2D_27as2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2109481124]
+texture = ExtResource("2_gnh0m")
