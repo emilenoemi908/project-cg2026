@@ -1,1 +1,4 @@
 res://scenes/Main.tscn
+res://scenes/personagem/pescador.gd
+res://scenes/personagem/pescador.tscn
+res://scenes/ui/UIDesafio.tscn

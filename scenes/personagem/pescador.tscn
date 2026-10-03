@@ -11,6 +11,7 @@ size = Vector2(30, 50)
 size = Vector2(160, 220)
 
 [node name="Pescador" type="CharacterBody2D" unique_id=500540765]
+scale = Vector2(1.5, 1.5)
 script = ExtResource("1_spt4x")
 
 [node name="Barco" type="Polygon2D" parent="." unique_id=532269066]
@@ -21,16 +22,60 @@ uv = PackedVector2Array(-84, 3, -10, 3, 20, 0, 91, -2, 19, 39, -24, 41)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1693520053]
 shape = SubResource("RectangleShape2D_27as2")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=905051304]
-offset_left = -15.0
-offset_top = -5.0
-offset_right = 15.0
-offset_bottom = 20.0
-color = Color(0.6375517, 2.3223088e-06, 2.8878452e-07, 1)
-
 [node name="visualRede" type="Polygon2D" parent="." unique_id=995839314]
+scale = Vector2(0.6, 0.6)
 color = Color(0.47058824, 0.39215687, 0.27450982, 1)
-polygon = PackedVector2Array(-10, 20, 10, 20, 80, 260, -80, 260)
+polygon = PackedVector2Array(-10, -20, 10, 20, 60, 150, 80, 220, 40, 255, 0, 265, -40, 255, -80, 220, -60, 150)
+
+[node name="Chumbada1" type="Polygon2D" parent="visualRede" unique_id=792479516]
+position = Vector2(-60, 150)
+color = Color(0.21518216, 0.21518219, 0.21518213, 1)
+polygon = PackedVector2Array(5, 0, 2.5, 4.3, -2.5, 4.3, -5, 0, -2.5, -4.3, 2.5, -4.3)
+
+[node name="Chumbada2" type="Polygon2D" parent="visualRede" unique_id=1387105002]
+position = Vector2(-40, 255)
+color = Color(0.21518216, 0.21518219, 0.21518213, 1)
+polygon = PackedVector2Array(5, 0, 2.5, 4.3, -2.5, 4.3, -5, 0, -2.5, -4.3, 2.5, -4.3)
+
+[node name="Chumbada3" type="Polygon2D" parent="visualRede" unique_id=1922161037]
+position = Vector2(0, 265)
+color = Color(0.21518216, 0.21518219, 0.21518213, 1)
+polygon = PackedVector2Array(5, 0, 2.5, 4.3, -2.5, 4.3, -5, 0, -2.5, -4.3, 2.5, -4.3)
+
+[node name="Chumbada4" type="Polygon2D" parent="visualRede" unique_id=1479803211]
+position = Vector2(40, 255)
+color = Color(0.21518216, 0.21518219, 0.21518213, 1)
+polygon = PackedVector2Array(5, 0, 2.5, 4.3, -2.5, 4.3, -5, 0, -2.5, -4.3, 2.5, -4.3)
+
+[node name="Chumbada5" type="Polygon2D" parent="visualRede" unique_id=631817722]
+position = Vector2(60, 150)
+color = Color(0.21518216, 0.21518219, 0.21518213, 1)
+polygon = PackedVector2Array(5, 0, 2.5, 4.3, -2.5, 4.3, -5, 0, -2.5, -4.3, 2.5, -4.3)
+
+[node name="Malha1" type="Line2D" parent="visualRede" unique_id=803471860]
+points = PackedVector2Array(-8, -8, -60, 150)
+width = 1.5
+default_color = Color(0.33426118, 0.21350431, 0.10296898, 1)
+
+[node name="Malha2" type="Line2D" parent="visualRede" unique_id=1184986520]
+points = PackedVector2Array(-8, -8, -40, 255)
+width = 1.5
+default_color = Color(0.33426118, 0.21350431, 0.10296898, 1)
+
+[node name="Malha3" type="Line2D" parent="visualRede" unique_id=1259650341]
+points = PackedVector2Array(-8, -8, 0, 265)
+width = 1.5
+default_color = Color(0.33426118, 0.21350431, 0.10296898, 1)
+
+[node name="Malha4" type="Line2D" parent="visualRede" unique_id=1529697596]
+points = PackedVector2Array(-8, -8, 40, 255)
+width = 1.5
+default_color = Color(0.33426118, 0.21350431, 0.10296898, 1)
+
+[node name="Malha5" type="Line2D" parent="visualRede" unique_id=1273844694]
+points = PackedVector2Array(-8, -8, 60, 150)
+width = 1.5
+default_color = Color(0.33426118, 0.21350431, 0.10296898, 1)
 
 [node name="areaPesca" type="Area2D" parent="." unique_id=1553656552 groups=["area_pesca"]]
 
@@ -43,3 +88,24 @@ stream = ExtResource("2_5h5hq")
 
 [node name="SomPescar" type="AudioStreamPlayer" parent="." unique_id=733821046]
 stream = ExtResource("3_3rf5g")
+
+[node name="Corpo" type="Polygon2D" parent="." unique_id=174640625]
+color = Color(0.25882354, 0.13333334, 1, 1)
+polygon = PackedVector2Array(-10, -5, -12, -20, -8, -32, 8, -32, 12, -20, 10, -5)
+uv = PackedVector2Array(-10, -5, -12, -20, -8, -32, 12, -20, -1, -12, 10, -5)
+
+[node name="Cabeca" type="Polygon2D" parent="." unique_id=1074486535]
+color = Color(0.8235294, 0.627451, 0.47058824, 1)
+polygon = PackedVector2Array(8, -40, 5.7, -34.3, 0, -32, -5.7, -34.3, -8, -40, -5.7, -45.7, 0, -48, 5.7, -45.7)
+
+[node name="Braco" type="Polygon2D" parent="." unique_id=215484977]
+color = Color(0.8235294, 0.627451, 0.47058824, 1)
+polygon = PackedVector2Array(10, -28, 18, -25, 16, -8, 8, -10)
+
+[node name="Braco2" type="Polygon2D" parent="." unique_id=1988985890]
+color = Color(0.8235294, 0.627451, 0.47058824, 1)
+polygon = PackedVector2Array(-10, -28, -18, -25, -16, -8, -8, -10)
+
+[node name="Chapeu" type="Polygon2D" parent="." unique_id=1029563596]
+color = Color(0.8235294, 0.7058824, 0.43137255, 1)
+polygon = PackedVector2Array(-16, -42, 16, -42, 10, -45, 6, -52, -6, -52, -10, -45)

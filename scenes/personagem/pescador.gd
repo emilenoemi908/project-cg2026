@@ -18,9 +18,9 @@ func _ready():
 func _ao_pescar(area):
 	som_pescar.play()
 
-func _physics_process(delta):
-	var direcao = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	velocity = direcao * VELOCIDADE
+func _physics_process(_delta):
+	var direcao_x = Input.get_axis("ui_left", "ui_right")
+	velocity = Vector2(direcao_x * VELOCIDADE, 0)
 	move_and_slide()
 
 func _input(event):
