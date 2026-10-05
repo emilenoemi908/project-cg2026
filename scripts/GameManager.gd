@@ -10,6 +10,8 @@ var tem_pescaria_a: bool = false
 var operacao: String = ""
 var resposta_correta: float = 0.0
 
+var acertos: int = 0
+
 func registrar_peixe(quantidade: int, peso: float):
 	peixes_pescaria_atual.append({"quantidade": quantidade, "peso": peso})
 
@@ -48,4 +50,7 @@ func gerar_desafio():
 	desafio_pronto.emit()
 
 func verificar_resposta(valor_digitado: float) -> bool:
-	return abs(valor_digitado - resposta_correta) < 0.05
+	var correto = abs(valor_digitado - resposta_correta) < 0.05
+	if correto:
+		acertos += 1
+	return correto

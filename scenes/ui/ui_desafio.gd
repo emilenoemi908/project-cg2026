@@ -38,6 +38,7 @@ func _responder(botao_pressionado: Button):
 	if GameManager.verificar_resposta(valor):
 		label_feedback.text = "Certo!"
 		som_certo.play()
+		get_node("/root/Main/HUD").atualizar()
 	else:
 		label_feedback.text = "Tente de novo. Resposta certa: %.1f" % GameManager.resposta_correta
 		som_errado.play()

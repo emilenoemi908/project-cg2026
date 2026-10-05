@@ -1,4 +1,9 @@
-res://scenes/Main.tscn
-res://scenes/personagem/pescador.gd
 res://scenes/personagem/pescador.tscn
+res://scenes/personagem/pescador.gd
 res://scenes/ui/UIDesafio.tscn
+res://scenes/peixes/Peixe.gd
+res://scenes/cenario/cenarioLagoa.tscn
+res://scripts/GameManager.gd
+res://scenes/Main.tscn
+res://scenes/hud.gd
+res://scenes/ui/ui_desafio.gd

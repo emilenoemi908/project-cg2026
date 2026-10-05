@@ -15,6 +15,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.7229669, 0.723306, 1)
 
+[node name="Margem" type="Polygon2D" parent="." unique_id=278829909]
+color = Color(0.3529412, 0.29411766, 0.15686275, 1)
+polygon = PackedVector2Array(0, 390, 1280, 390, 1280, 410, 0, 410)
+
 [node name="agua" type="ColorRect" parent="." unique_id=971960509]
 offset_top = 400.0
 offset_right = 1280.0
@@ -35,3 +39,18 @@ position = Vector2(900, 520)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="limiteAgua" unique_id=1451955084]
 position = Vector2(640, 560)
 shape = SubResource("RectangleShape2D_gcxnu")
+
+[node name="Nuvem1" type="Polygon2D" parent="." unique_id=822073804]
+position = Vector2(200, 80)
+color = Color(inf, inf, inf, 1)
+polygon = PackedVector2Array(-40, 0, -28, -12, 0, -16, 28, -12, 40, 0, 28, 10, 0, 14, -28, 10)
+
+[node name="Nuvem2" type="Polygon2D" parent="." unique_id=1177330093]
+position = Vector2(600, 50)
+color = Color(inf, inf, inf, 1)
+polygon = PackedVector2Array(-40, 0, -28, -12, 0, -16, 28, -12, 40, 0, 28, 10, 0, 14, -28, 10)
+
+[node name="Nuvem3" type="Polygon2D" parent="." unique_id=1452981432]
+position = Vector2(1000, 100)
+color = Color(inf, inf, inf, 1)
+polygon = PackedVector2Array(-40, 0, -28, -12, 0, -16, 28, -12, 40, 0, 28, 10, 0, 14, -28, 10)
