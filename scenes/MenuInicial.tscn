@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://dcdalj0q3b3ff"]
+
+[ext_resource type="Script" uid="uid://csp6in3ml4ri0" path="res://scenes/menu_inicial.gd" id="1_0kx3q"]
+[ext_resource type="Texture2D" uid="uid://5atw2qqudkv5" path="res://assets/sprites/fundo_menu.png" id="1_dshj6"]
+[ext_resource type="PackedScene" uid="uid://cv0lnwaqyn7ls" path="res://scenes/peixes/peixe.tscn" id="2_ndsd1"]
+[ext_resource type="Texture2D" uid="uid://cyylmbiax62xr" path="res://assets/sprites/icons8-plus-math-100.png" id="4_37lmg"]
+[ext_resource type="Texture2D" uid="uid://cc2hhwccyjfsh" path="res://assets/sprites/icons8-horizontal-line-100.png" id="5_g080d"]
+[ext_resource type="Texture2D" uid="uid://bdpgl7u2db5fj" path="res://assets/sprites/icons8-multiply-100.png" id="6_0rbed"]
+[ext_resource type="Texture2D" uid="uid://wwyp5dqoj8es" path="res://assets/sprites/icons8-fishing-50.png" id="7_37lmg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_27as2"]
+bg_color = Color(0.41960785, 0.25882354, 0.14901961, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gcxnu"]
+bg_color = Color(0.49019608, 0.32156864, 0.1882353, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[node name="MenuPrincipal" type="Node2D" unique_id=120152442]
+script = ExtResource("1_0kx3q")
+
+[node name="Fundo" type="Sprite2D" parent="." unique_id=25761818]
+position = Vector2(576, 324)
+texture = ExtResource("1_dshj6")
+
+[node name="Nuvem1" type="Polygon2D" parent="." unique_id=1886957945]
+position = Vector2(200, 90)
+color = Color(inf, inf, inf, 1)
+polygon = PackedVector2Array(-45, 5, -45, -5, -30, -5, -30, -15, -10, -15, -10, -25, 10, -25, 10, -15, 30, -15, 30, -5, 45, -5, 45, 5)
+uv = PackedVector2Array(-45, 5, -45, -5, -30, -5, -30, -15, -10, -15, -10, -25, 10, -25, -28, 10, 10, -15, 30, -15, 30, -5, 45, -5, 45, 5, 36.799988, -3.399994)
+
+[node name="Nuvem2" type="Polygon2D" parent="." unique_id=1942574828]
+position = Vector2(600, 60)
+color = Color(inf, inf, inf, 1)
+polygon = PackedVector2Array(-45, 5, -45, -5, -30, -5, -30, -15, -10, -15, -10, -25, 10, -25, 10, -15, 30, -15, 30, -5, 45, -5, 45, 5)
+uv = PackedVector2Array(-45, 5, -45, -5, -30, -5, -30, -15, -10, -15, -10, -25, 10, -25, -28, 10, 10, -15, 30, -15, 30, -5, 45, -5, 45, 5, 36.799988, -3.399994)
+
+[node name="Nuvem3" type="Polygon2D" parent="." unique_id=1174536866]
+position = Vector2(950, 100)
+color = Color(inf, inf, inf, 1)
+polygon = PackedVector2Array(-45, 5, -45, -5, -30, -5, -30, -15, -10, -15, -10, -25, 10, -25, 10, -15, 30, -15, 30, -5, 45, -5, 45, 5)
+uv = PackedVector2Array(-45, 5, -45, -5, -30, -5, -30, -15, -10, -15, -10, -25, 10, -25, -28, 10, 10, -15, 30, -15, 30, -5, 45, -5, 45, 5, 36.799988, -3.399994)
+
+[node name="peixe" parent="." unique_id=1561372849 instance=ExtResource("2_ndsd1")]
+position = Vector2(150, 520)
+
+[node name="peixe2" parent="." unique_id=125260200 instance=ExtResource("2_ndsd1")]
+position = Vector2(950, 530)
+
+[node name="Titulo" type="Label" parent="." unique_id=1626992048]
+offset_left = 307.0
+offset_top = 116.0
+offset_right = 888.0
+offset_bottom = 177.0
+theme_override_colors/font_outline_color = Color(0.1764706, 0.105882354, 0.05490196, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 44
+text = "PESCA NA LAGOA MUNDAÚ"
+horizontal_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="." unique_id=1508355857]
+offset_left = 469.0
+offset_top = 189.0
+offset_right = 725.0
+offset_bottom = 224.0
+theme_override_colors/font_color = Color(1, 0.8509804, 0.47058824, 1)
+theme_override_colors/font_outline_color = Color(0.1764706, 0.105882354, 0.05490196, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 22
+text = "Matemática & Aventura"
+
+[node name="BotaoSoma" type="Button" parent="." unique_id=1448341049]
+offset_left = 416.0
+offset_top = 280.0
+offset_right = 736.0
+offset_bottom = 350.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_27as2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gcxnu")
+text = "Soma e Subtração"
+
+[node name="BotaoMultiplicacao" type="Button" parent="." unique_id=1922203858]
+offset_left = 416.0
+offset_top = 370.0
+offset_right = 736.0
+offset_bottom = 440.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_27as2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gcxnu")
+text = "Multiplicação"
+
+[node name="BotaoMeta" type="Button" parent="." unique_id=1747747078]
+offset_left = 416.0
+offset_top = 460.0
+offset_right = 736.0
+offset_bottom = 530.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_27as2")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gcxnu")
+text = "Meta de Pesca"
+
+[node name="IconeSoma" type="Sprite2D" parent="." unique_id=516515139]
+position = Vector2(555, 285)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_37lmg")
+
+[node name="IconeSubtracao" type="Sprite2D" parent="." unique_id=916013141]
+position = Vector2(615, 285)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("5_g080d")
+
+[node name="IconeMultiplicacao" type="Sprite2D" parent="." unique_id=558229984]
+position = Vector2(574, 370)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_0rbed")
+
+[node name="IconeMeta" type="Sprite2D" parent="." unique_id=2044370248]
+position = Vector2(576, 450)
+texture = ExtResource("7_37lmg")

@@ -19,18 +19,34 @@ func _ready():
 	GameManager.desafio_pronto.connect(_mostrar_desafio)
 
 func _mostrar_desafio():
-	var simbolo = "+" if GameManager.operacao == "soma" else "-"
-	label_pergunta.text = "%.1f kg %s %.1f kg = ?" % [GameManager.pescaria_a.peso, simbolo, GameManager.pescaria_b.peso]
+	var texto_pergunta = ""
+	match GameManager.operacao:
+		"soma":
+			texto_pergunta = "%.1f kg + %.1f kg = ?" % [GameManager.pescaria_a.peso, GameManager.pescaria_b.peso]
+		"subtracao":
+			texto_pergunta = "%.1f kg - %.1f kg = ?" % [GameManager.pescaria_a.peso, GameManager.pescaria_b.peso]
+		"multiplicacao":
+			texto_pergunta = "%d peixes x %.1f kg cada = ?" % [GameManager.pescaria_a.quantidade, GameManager.pescaria_a.peso]
+
+	label_pergunta.text = texto_pergunta
 	label_feedback.text = ""
 
 	var correta = GameManager.resposta_correta
-	opcoes = [correta, snappedf(correta + randf_range(0.5, 1.5), 0.1), snappedf(max(0.0, correta - randf_range(0.5, 1.5)), 0.1)]
+	var candidatas: Array = []
+	for k in range(1, 5):
+		var acima = snappedf(correta + k * 0.5, 0.1)
+		var abaixo = snappedf(correta - k * 0.5, 0.1)
+		candidatas.append(acima)
+		if abaixo >= 0.0:
+			candidatas.append(abaixo)
+	candidatas.shuffle()
+
+	opcoes = [correta, candidatas[0], candidatas[1]]
 	opcoes.shuffle()
 
 	botao_a.text = str(opcoes[0])
 	botao_b.text = str(opcoes[1])
 	botao_c.text = str(opcoes[2])
-
 	panel.visible = true
 
 func _responder(botao_pressionado: Button):
@@ -38,10 +54,10 @@ func _responder(botao_pressionado: Button):
 	if GameManager.verificar_resposta(valor):
 		label_feedback.text = "Certo!"
 		som_certo.play()
-		get_node("/root/Main/HUD").atualizar()
 	else:
 		label_feedback.text = "Tente de novo. Resposta certa: %.1f" % GameManager.resposta_correta
 		som_errado.play()
-		
+
 	await get_tree().create_timer(2.0).timeout
 	panel.visible = false
+	
