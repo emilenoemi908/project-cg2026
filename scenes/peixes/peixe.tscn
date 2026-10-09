@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cv0lnwaqyn7ls"]
 
 [ext_resource type="Script" uid="uid://dhbfdlyxl6jkx" path="res://scenes/peixes/Peixe.gd" id="1_v18uc"]
-[ext_resource type="Texture2D" uid="uid://bn1ucmj7fujxm" path="res://scripts/fish_orange.png" id="2_gnh0m"]
+[ext_resource type="Texture2D" uid="uid://bn1ucmj7fujxm" path="res://assets/sprites/fish_orange.png" id="2_gnh0m"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_27as2"]
 radius = 25.0

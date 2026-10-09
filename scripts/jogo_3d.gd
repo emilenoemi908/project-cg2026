@@ -23,6 +23,7 @@ var nuvens: Array = []
 var sons := {}
 var label_pontos: Label
 var tempo := 0.0
+var jogando := false
 
 func criar_material(cor: Color, alpha := false) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
@@ -77,6 +78,11 @@ func _ready():
 	montar_sons()
 	GameManager.placar_mudou.connect(atualizar_placar)
 	atualizar_placar()
+	var briefing := Briefing.new()
+	add_child(briefing)
+	briefing.comecou.connect(func(): jogando = true)
+	add_child(PainelMeta.new())
+	
 
 func montar_ambiente():
 	var ceu := ProceduralSkyMaterial.new()
@@ -392,15 +398,18 @@ func _process(delta):
 			n.position.x = -130.0
 
 func _physics_process(_delta):
-	var dir := Input.get_axis("ui_left", "ui_right")
+	var dir := Input.get_axis("ui_left", "ui_right") if jogando else 0.0
 	pescador.velocity = Vector3(dir * VELOCIDADE, 0, 0)
 	pescador.move_and_slide()
 	pescador.position.x = clampf(pescador.position.x, -LIMITE_X, LIMITE_X)
 	barco.position.y = 0.3 + sin(tempo * 1.6) * 0.04
 	barco.rotation.z = sin(tempo * 1.2) * 0.03 - dir * 0.04
 	barco.rotation.x = sin(tempo * 0.9) * 0.02
+	
 
 func _unhandled_input(event):
+	if not jogando:
+		return
 	var acionar : bool = event.is_action_pressed("ui_accept")
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		acionar = true

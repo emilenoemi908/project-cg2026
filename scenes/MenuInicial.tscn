@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dcdalj0q3b3ff"]
 
-[ext_resource type="Script" uid="uid://csp6in3ml4ri0" path="res://scenes/menu_inicial.gd" id="1_0kx3q"]
+[ext_resource type="Script" uid="uid://csp6in3ml4ri0" path="res://scripts/menu_inicial.gd" id="1_0kx3q"]
 [ext_resource type="Texture2D" uid="uid://5atw2qqudkv5" path="res://assets/sprites/fundo_menu.png" id="1_dshj6"]
 [ext_resource type="PackedScene" uid="uid://cv0lnwaqyn7ls" path="res://scenes/peixes/peixe.tscn" id="2_ndsd1"]
 [ext_resource type="Texture2D" uid="uid://cyylmbiax62xr" path="res://assets/sprites/icons8-plus-math-100.png" id="4_37lmg"]

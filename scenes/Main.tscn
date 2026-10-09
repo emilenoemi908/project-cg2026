@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cv0lnwaqyn7ls" path="res://scenes/peixes/peixe.tscn" id="3_vcsgt"]
 [ext_resource type="PackedScene" uid="uid://c0ljd1w107aln" path="res://scenes/ui/UIDesafio.tscn" id="4_rarhs"]
 [ext_resource type="AudioStream" uid="uid://bqkl5q7yisvh8" path="res://assets/sons/musica_fundo.mp3" id="5_vcsgt"]
-[ext_resource type="Script" uid="uid://ln1ucq8xhrpj" path="res://scenes/hud.gd" id="6_c01mt"]
+[ext_resource type="Script" uid="uid://ln1ucq8xhrpj" path="res://scripts/hud.gd" id="6_c01mt"]
 
 [node name="Main" type="Node2D" unique_id=2109384193]
 

@@ -1,11 +1,7 @@
-res://scenes/MenuInicial.tscn
+res://scenes/Jogo3D.tscn
 res://scripts/GameManager.gd
 res://scenes/ui/ui_desafio.gd
-res://scenes/menu_inicial.gd
-res://scenes/peixes/Peixe.gd
-res://scenes/jogo_3d.gd
-res://scenes/peixe_3d.gd
-res://scenes/jogo_3d.tscn
+res://scripts/briefing.gd
+res://scripts/painel_meta.gd
 res://scripts/jogo_3d.gd
-res://scenes/Jogo_3d.tscn
-res://scenes/Jogo3D.tscn
+res://scenes/MenuInicial.tscn
