@@ -1,7 +1,0 @@
-res://scenes/Jogo3D.tscn
-res://scripts/GameManager.gd
-res://scenes/ui/ui_desafio.gd
-res://scripts/briefing.gd
-res://scripts/painel_meta.gd
-res://scripts/jogo_3d.gd
-res://scenes/MenuInicial.tscn
