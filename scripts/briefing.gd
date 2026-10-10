@@ -63,15 +63,14 @@ func _titulo() -> String:
 			return "Soma e Subtração"
 
 func _descricao() -> String:
-	var comum := "\n\nCada peixe mostra, acima dele, a quantidade e o peso.\nControles: setas movem o barco; Espaço ou clique lançam e recolhem a tarrafa."
+	var comum := "\n\nCada peixe mostra, acima dele, a espécie e o peso.\nControles: setas movem o barco; Espaço ou clique lançam e recolhem a tarrafa.\nOs pesos do jogo são valores aproximados, escolhidos para facilitar as contas."
 	match GameManager.modo:
 		"multiplicacao":
-			return "Você é pescador na Lagoa Mundaú. Lance a tarrafa sobre os peixes e recolha. Conte quantos peixes vieram: todos pesam 0,5 kg. Multiplique a quantidade pelo peso de cada peixe para achar o peso total e escolha a resposta certa." + comum
+			return "Você é pescador na Lagoa Mundaú. Hoje só aparece uma espécie de peixe, e todos pesam o mesmo (veja no canto da tela). Lance a tarrafa, recolha, conte quantos peixes vieram e multiplique pelo peso de cada um." + comum
 		"meta":
 			return "A pescaria de hoje tem uma meta, em quilos ou em número de peixes (ela aparece no canto da tela). Cada vez que você recolhe a tarrafa, o que veio é somado ao total. Se ainda faltar, responda quanto falta. Se passar da meta, responda quanto passou e tente de novo. Se acertar a meta exata, você ganha um ponto e recebe uma nova meta." + comum
 		_:
-			return "Você é pescador na Lagoa Mundaú. Lance a tarrafa sobre os peixes e recolha. Depois de duas pescarias, vamos comparar os pesos totais: some ou subtraia para achar o resultado e escolha a resposta certa." + comum
-
+			return "Você é pescador na Lagoa Mundaú. Lance a tarrafa sobre os peixes e recolha. Depois de duas pescarias, vamos comparar os pesos das tarrafas: some ou subtraia para achar o resultado e escolha a resposta certa." + comum
 func _comecar():
 	comecou.emit()
 	queue_free()

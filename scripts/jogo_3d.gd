@@ -82,6 +82,7 @@ func _ready():
 	add_child(briefing)
 	briefing.comecou.connect(func(): jogando = true)
 	add_child(PainelMeta.new())
+	add_child(PainelTarrafa.new())
 	
 
 func montar_ambiente():
@@ -146,6 +147,28 @@ func montar_agua():
 	add_child(agua)
 
 # ---------- cenário ----------
+
+func criar_margem_distante():
+	add_child(criar_malha(caixa(180, 1.0, 14), Color("7a9a55"), Vector3(0, -0.2, -62)))
+	var cores = [Color("e6d3a8"), Color("c9dbe6"), Color("e3b7a8"), Color("d8e0b0"), Color("f0e4c8")]
+	var x := -80.0
+	while x < 80.0:
+		if absf(x) > 14.0:
+			criar_casa_alvenaria(Vector3(x + randf_range(-1.5, 1.5), 0.3, -62 + randf_range(-3, 3)), cores[randi() % cores.size()])
+		x += randf_range(6.0, 10.0)
+
+func criar_casa_alvenaria(pos: Vector3, cor: Color):
+	var raiz := Node3D.new()
+	raiz.position = pos
+	raiz.rotation_degrees.y = randf_range(-8, 8)
+	add_child(raiz)
+	var h := randf_range(1.8, 2.6)
+	raiz.add_child(criar_malha(caixa(3.2, h, 2.6), cor, Vector3(0, h / 2.0, 0)))
+	var telhado := PrismMesh.new()
+	telhado.size = Vector3(3.6, 1.0, 3.0)
+	raiz.add_child(criar_malha(telhado, Color("b8643c"), Vector3(0, h + 0.5, 0)))
+	raiz.add_child(criar_malha(caixa(0.6, 1.1, 0.05), Color("6b4226"), Vector3(0.6, 0.55, 1.31)))
+	
 func montar_cenario():
 	# colinas distantes
 	for d in [[Vector3(-70, -3, -130), Vector3(50, 14, 30)], [Vector3(30, -3, -140), Vector3(70, 18, 30)], [Vector3(110, -3, -125), Vector3(45, 12, 30)]]:
@@ -171,14 +194,14 @@ func montar_cenario():
 	criar_arvore(Vector3(-34, 0.4, -35), 1.2)
 	criar_arvore(Vector3(-30, 0.4, -33), 1.0)
 	criar_arvore(Vector3(-36, 0.4, -32), 0.9)
-	criar_palafita(Vector3(-18, 0, -30), 9.0)
+	criar_margem_distante()
 
 	# lado direito
 	criar_ilha(Vector3(34, 0, -36), 7.5)
 	criar_arvore(Vector3(33, 0.4, -37), 1.2)
 	criar_arvore(Vector3(37, 0.4, -35), 1.0)
 	criar_arvore(Vector3(31, 0.4, -34), 0.9)
-	criar_palafita(Vector3(20, 0, -28), 9.0)
+	criar_margem_distante()
 	criar_casa(Vector3(22, 1.55, -28))
 
 func criar_ilha(pos: Vector3, raio: float):
@@ -237,7 +260,7 @@ func montar_pescador():
 
 	var col := CollisionShape3D.new()
 	var forma := BoxShape3D.new()
-	forma.size = Vector3(4.2, 1.0, 1.5)
+	forma.size = Vector3(6.2, 1.0, 1.5)
 	col.shape = forma
 	col.position = Vector3(0, 0.3, 0)
 	pescador.add_child(col)
@@ -253,7 +276,7 @@ func montar_pescador():
 	externo.radius = 1.0
 	externo.radial_segments = 24
 	externo.rings = 12
-	externo.scale = Vector3(2.2, 0.7, 0.85)
+	externo.scale = Vector3(3.0, 0.7, 0.85)
 	externo.position = Vector3(0, 0.15, 0)
 	externo.material = criar_material(Color("8b5a32"))
 	casco.add_child(externo)
@@ -262,11 +285,11 @@ func montar_pescador():
 	interno.radial_segments = 24
 	interno.rings = 12
 	interno.operation = CSGShape3D.OPERATION_SUBTRACTION
-	interno.scale = Vector3(2.0, 0.58, 0.65)
+	interno.scale = Vector3(2.8, 0.58, 0.65)
 	interno.position = Vector3(0, 0.25, 0)
 	casco.add_child(interno)
 	var corte := CSGBox3D.new()
-	corte.size = Vector3(10, 2, 4)
+	corte.size = Vector3(14, 2, 4)
 	corte.operation = CSGShape3D.OPERATION_SUBTRACTION
 	corte.position = Vector3(0, 1.45, 0)
 	casco.add_child(corte)

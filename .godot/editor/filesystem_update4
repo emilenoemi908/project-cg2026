@@ -1,0 +1,6 @@
+res://scenes/Jogo3D.tscn
+res://scripts/jogo_3d.gd
+res://scripts/GameManager.gd
+res://scripts/briefing.gd
+res://scripts/painel_tarrafa.gd
+res://scripts/menu_inicial.gd
