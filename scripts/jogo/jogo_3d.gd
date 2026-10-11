@@ -138,7 +138,6 @@ func _ready():
 	GameManager.ultimo_respondido.connect(func(): jogando = false)
 	atualizar_placar()
 
-	# CORREÇÃO 1: Instancia o painel de perguntas/desafios na HUD principal
 	if cena_ui_desafio:
 		add_child(cena_ui_desafio.instantiate())
 	else:
@@ -385,41 +384,41 @@ func montar_pescador():
 		var pos_c := Vector3(cos(deg_to_rad(ang2)), 0, -sin(deg_to_rad(ang2))) * RAIO_TARRAFA
 		tarrafa_visual.add_child(criar_malha(esfera(0.11), Color("3c3c3c"), pos_c))
 
-	# CORREÇÃO 2: Reconectando o sinal para capturar os peixes na água
 	tarrafa.area_entered.connect(_ao_pescar)
 
 func montar_peixes():
+	var largura_slot := (2.0 * LIMITE_X) / float(NUM_PEIXES)
 	for i in NUM_PEIXES:
 		var p := Peixe3D.new()
-		p.position = Vector3(randf_range(-LIMITE_X, LIMITE_X), 0.02, randf_range(-3.0, -6.0))
+		p.slot = i
+		var z := -3.4 if i % 2 == 0 else -5.6
+		p.position = Vector3(-LIMITE_X + (i + 0.5) * largura_slot, 0.02, z)
 		add_child(p)
 
 # ---------- interface e som ----------
 func montar_interface():
+	if cena_ui_desafio:
+		add_child(cena_ui_desafio.instantiate())
+	else:
+		push_warning("Arraste UIDesafio.tscn para a propriedade 'Cena Ui Desafio' do nó Jogo3D.")
+
 	var hud := CanvasLayer.new()
 	add_child(hud)
 
 	label_pontos = Label.new()
-	label_pontos.position = Vector2(20, 16)
-	label_pontos.add_theme_font_size_override("font_size", 26)
-	label_pontos.add_theme_color_override("font_color", Color.WHITE)
-	label_pontos.add_theme_color_override("font_outline_color", Color("2d1b0e"))
-	label_pontos.add_theme_constant_override("outline_size", 6)
-	hud.add_child(label_pontos)
+	EstiloUI.rotulo(label_pontos, 26, Color.WHITE, 5)
+	EstiloUI.placa(hud, label_pontos, Vector2(20, 12))
 
 	var ajuda := Label.new()
-	ajuda.text = "Setas: mover o barco    |    Espaço ou clique: lançar/recolher a tarrafa"
-	ajuda.position = Vector2(20, 598)
-	ajuda.add_theme_font_size_override("font_size", 18)
-	ajuda.add_theme_color_override("font_color", Color.WHITE)
-	ajuda.add_theme_color_override("font_outline_color", Color("2d1b0e"))
-	ajuda.add_theme_constant_override("outline_size", 5)
-	hud.add_child(ajuda)
+	ajuda.text = "Setas: mover o barco   |   Espaço ou clique: lançar/recolher a tarrafa (ou mergulhar)"
+	EstiloUI.rotulo(ajuda, 18, Color.WHITE, 4)
+	EstiloUI.placa(hud, ajuda, Vector2(20, 596))
 
 	var voltar := Button.new()
 	voltar.text = "Menu"
-	voltar.size = Vector2(100, 40)
-	voltar.position = Vector2(get_viewport().get_visible_rect().size.x - 120, 16)
+	voltar.custom_minimum_size = Vector2(110, 44)
+	voltar.position = Vector2(get_viewport().get_visible_rect().size.x - 130, 14)
+	EstiloUI.botao(voltar, 22)
 	voltar.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/MenuInicial.tscn"))
 	hud.add_child(voltar)
 
@@ -526,7 +525,6 @@ func recolher_rede():
 	tween_rede.tween_property(tarrafa_visual, "scale", Vector3(0.1, 1, 0.1), 0.3)
 	tween_rede.tween_callback(func(): tarrafa_visual.visible = false)
 
-# CORREÇÃO 3: Lógica executada quando o peixe entra na área da tarrafa
 func _ao_pescar(area: Area3D):
 	if area.has_method("capturar"):
 		var dados = area.capturar()

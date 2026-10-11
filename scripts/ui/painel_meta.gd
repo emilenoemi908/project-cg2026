@@ -9,21 +9,14 @@ func _ready():
 		return
 
 	label_meta = Label.new()
-	label_meta.position = Vector2(20, 56)
-	label_meta.add_theme_font_size_override("font_size", 24)
-	label_meta.add_theme_color_override("font_color", Color("ffd978"))
-	label_meta.add_theme_color_override("font_outline_color", Color("2d1b0e"))
-	label_meta.add_theme_constant_override("outline_size", 6)
-	add_child(label_meta)
+	EstiloUI.rotulo(label_meta, 24, Color("ffd978"), 4)
+	EstiloUI.placa(self, label_meta, Vector2(20, 76))
 
 	label_aviso = Label.new()
 	label_aviso.position = Vector2(0, 300)
 	label_aviso.size = Vector2(get_viewport().get_visible_rect().size.x, 80)
 	label_aviso.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label_aviso.add_theme_font_size_override("font_size", 44)
-	label_aviso.add_theme_color_override("font_color", Color.WHITE)
-	label_aviso.add_theme_color_override("font_outline_color", Color("2d1b0e"))
-	label_aviso.add_theme_constant_override("outline_size", 10)
+	EstiloUI.rotulo(label_aviso, 52, Color.WHITE, 12)
 	label_aviso.modulate.a = 0.0
 	add_child(label_aviso)
 

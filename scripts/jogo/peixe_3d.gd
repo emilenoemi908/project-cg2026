@@ -2,15 +2,17 @@ class_name Peixe3D
 extends Area3D
 
 const LIMITE_X := 9.0
+const NUM_SLOTS := 6
 const DUR_PULO := 0.8
 
+var slot := 0
 var especie: Dictionary = {}
 var peso: float = 0.5
 var base: Vector3
 var tempo := 0.0
 var fase := 0.0
 var velocidade := 0.8
-var amplitude := 1.2
+var amplitude := 0.8
 
 var pulando := false
 var t_pulo := 0.0
@@ -23,7 +25,7 @@ var rotulo: Label3D = null
 func _ready():
 	fase = randf() * TAU
 	velocidade = randf_range(0.5, 1.0)
-	amplitude = randf_range(0.8, 1.8)
+	amplitude = randf_range(0.5, 1.0)
 	proximo_pulo = randf_range(4.0, 12.0)
 	base = position
 
@@ -35,10 +37,13 @@ func _ready():
 
 	rotulo = Label3D.new()
 	rotulo.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	rotulo.font_size = 48
-	rotulo.pixel_size = 0.012
-	rotulo.outline_size = 10
-	rotulo.position = Vector3(0, 1.1, 0)
+	rotulo.font_size = 36
+	rotulo.pixel_size = 0.011
+	rotulo.outline_size = 12
+	rotulo.position = Vector3(0, 1.3 + (slot % 2) * 0.9, 0)
+	var f := EstiloUI.fonte()
+	if f:
+		rotulo.font = f
 	add_child(rotulo)
 
 	_sortear()
@@ -48,7 +53,7 @@ func _ready():
 func _mat(cor: Color) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
 	m.albedo_color = cor
-	m.roughness = 0.6
+	m.roughness = 0.45
 	return m
 
 func _sortear():
@@ -61,7 +66,7 @@ func _montar_visual():
 	if corpo_visual:
 		corpo_visual.queue_free()
 	corpo_visual = Node3D.new()
-	corpo_visual.scale = Vector3.ONE * 1.3
+	corpo_visual.scale = Vector3.ONE * 1.7
 	add_child(corpo_visual)
 
 	var comp: float = especie["comp"]
@@ -77,6 +82,14 @@ func _montar_visual():
 	corpo.scale = Vector3(comp, 0.6 * alt, 0.38)
 	corpo.material_override = _mat(cor)
 	corpo_visual.add_child(corpo)
+
+	# barriga mais clara
+	var barriga := MeshInstance3D.new()
+	barriga.mesh = esfera
+	barriga.scale = Vector3(comp * 0.98, 0.34 * alt, 0.39)
+	barriga.position = Vector3(0, -0.12 * alt, 0)
+	barriga.material_override = _mat(cor.lightened(0.5))
+	corpo_visual.add_child(barriga)
 
 	if especie["linha"]:
 		var faixa := MeshInstance3D.new()
@@ -163,6 +176,8 @@ func _process(delta):
 func _ao_ser_alcancado(area: Area3D):
 	if not area.is_in_group("area_pesca"):
 		return
+	if not GameManager.pode_pescar():
+		return
 	GameManager.registrar_peixe(String(especie["nome"]), peso)
 	_reaparecer()
 
@@ -173,7 +188,10 @@ func _reaparecer():
 	pulando = false
 	await get_tree().create_timer(randf_range(1.5, 3.0)).timeout
 	_sortear()
-	base = Vector3(randf_range(-LIMITE_X, LIMITE_X), 0.02, randf_range(-3.0, -6.0))
+	var largura_slot := (2.0 * LIMITE_X) / float(NUM_SLOTS)
+	var cx := -LIMITE_X + (slot + 0.5) * largura_slot + randf_range(-0.4, 0.4)
+	var cz := -3.4 if slot % 2 == 0 else -5.6
+	base = Vector3(cx, 0.02, cz)
 	position = base
 	tempo = 0.0
 	proximo_pulo = randf_range(4.0, 12.0)

@@ -12,20 +12,28 @@ extends CanvasLayer
 var opcoes: Array = []
 var respondido := false
 var id_desafio := 0
+const TEMPO_FEEDBACK := 1.2
 
 func _ready():
+	
+	if get_tree().get_nodes_in_group("ui_desafio").size() > 0:
+		queue_free()
+		return
+	add_to_group("ui_desafio")
+
 	var largura = get_viewport().get_visible_rect().size.x
-	panel.size = Vector2(560, 260)
-	panel.position = Vector2((largura - 560) / 2.0, 20)
-	label_pergunta.position = Vector2(20, 14)
-	label_pergunta.size = Vector2(520, 110)
+	var larg_painel := 470.0
+	panel.size = Vector2(larg_painel, 196)
+	panel.position = Vector2(max((largura - larg_painel) / 2.0, 352.0), 16)
+	label_pergunta.position = Vector2(16, 10)
+	label_pergunta.size = Vector2(438, 78)
 	label_pergunta.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var botoes = [botao_a, botao_b, botao_c]
 	for i in 3:
-		botoes[i].position = Vector2(20 + i * 180, 140)
-		botoes[i].size = Vector2(160, 54)
-	label_feedback.position = Vector2(20, 206)
-	label_feedback.size = Vector2(520, 48)
+		botoes[i].position = Vector2(16 + i * 150, 94)
+		botoes[i].size = Vector2(138, 44)
+	label_feedback.position = Vector2(16, 144)
+	label_feedback.size = Vector2(438, 48)
 	label_feedback.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 	panel.visible = false
@@ -33,6 +41,12 @@ func _ready():
 	botao_b.pressed.connect(func(): _responder(1))
 	botao_c.pressed.connect(func(): _responder(2))
 	GameManager.desafio_pronto.connect(_mostrar_desafio)
+
+	EstiloUI.painel(panel)
+	for b in [botao_a, botao_b, botao_c]:
+		EstiloUI.botao(b, 20)
+	EstiloUI.rotulo(label_pergunta, 20, Color.WHITE, 5)
+	EstiloUI.rotulo(label_feedback, 18, Color("ffd978"), 5)
 
 func _mostrar_desafio():
 	id_desafio += 1
@@ -57,6 +71,7 @@ func _responder(i: int):
 		som_errado.play()
 
 	var meu_id := id_desafio
-	await get_tree().create_timer(3.0).timeout
+	if TEMPO_FEEDBACK > 0.0:
+		await get_tree().create_timer(TEMPO_FEEDBACK).timeout
 	if meu_id == id_desafio:
 		panel.visible = false

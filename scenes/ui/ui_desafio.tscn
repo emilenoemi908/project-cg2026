@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c0ljd1w107aln"]
 
-[ext_resource type="Script" uid="uid://d11ldc8w43jgr" path="res://scenes/ui/ui_desafio.gd" id="1_eerpw"]
+[ext_resource type="Script" uid="uid://d11ldc8w43jgr" path="res://scripts/ui/ui_desafio.gd" id="1_eerpw"]
 [ext_resource type="AudioStream" uid="uid://bynscnyptkjlp" path="res://assets/sons/som_certo.ogg" id="2_npewa"]
 [ext_resource type="AudioStream" uid="uid://dg1bumpr0i0qq" path="res://assets/sons/som_errado.ogg" id="3_3nssj"]
 

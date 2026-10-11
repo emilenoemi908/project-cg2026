@@ -10,16 +10,17 @@ signal acerto_feito
 signal ultimo_respondido
 
 const LIMITE_DESAFIOS := 8
+const MAX_PEIXES_TARRAFA := 5
 
 var modo: String = "soma_subtracao"
 
 # Os pesos são DIDÁTICOS (múltiplos de 0,5 kg), escolhidos para facilitar as contas.
 var especies: Array = [
-	{"nome": "Tainha", "plural": "tainhas", "pesos": [1.0, 1.5, 2.0], "cor": Color("9aa7ad"), "nadadeira": Color("6f7b82"), "comp": 1.15, "alt": 1.0, "linha": false, "barbilhoes": false},
-	{"nome": "Curimã", "plural": "curimãs", "pesos": [0.5, 1.0], "cor": Color("aab5a6"), "nadadeira": Color("d8c46a"), "comp": 1.0, "alt": 1.0, "linha": false, "barbilhoes": false},
-	{"nome": "Carapeba", "plural": "carapebas", "pesos": [0.5, 1.0], "cor": Color("c5ccd0"), "nadadeira": Color("e0c35a"), "comp": 0.9, "alt": 1.3, "linha": false, "barbilhoes": false},
-	{"nome": "Camurim", "plural": "camurins", "pesos": [1.5, 2.0, 2.5], "cor": Color("cfcf9e"), "nadadeira": Color("a8a574"), "comp": 1.3, "alt": 0.85, "linha": true, "barbilhoes": false},
-	{"nome": "Mandim", "plural": "mandins", "pesos": [0.5], "cor": Color("6b6258"), "nadadeira": Color("4d463f"), "comp": 0.9, "alt": 0.8, "linha": false, "barbilhoes": true},
+	{"nome": "Tainha", "plural": "tainhas", "pesos": [1.0, 1.5, 2.0], "cor": Color("5f8fb0"), "nadadeira": Color("2f5f82"), "comp": 1.15, "alt": 1.0, "linha": false, "barbilhoes": false},
+	{"nome": "Curimã", "plural": "curimãs", "pesos": [0.5, 1.0], "cor": Color("86b36a"), "nadadeira": Color("e3b83a"), "comp": 1.0, "alt": 1.0, "linha": false, "barbilhoes": false},
+	{"nome": "Carapeba", "plural": "carapebas", "pesos": [0.5, 1.0], "cor": Color("8fb8d4"), "nadadeira": Color("f0b429"), "comp": 0.9, "alt": 1.3, "linha": false, "barbilhoes": false},
+	{"nome": "Camurim", "plural": "camurins", "pesos": [1.5, 2.0, 2.5], "cor": Color("d2b85a"), "nadadeira": Color("8a7a2e"), "comp": 1.3, "alt": 0.85, "linha": true, "barbilhoes": false},
+	{"nome": "Mandim", "plural": "mandins", "pesos": [0.5], "cor": Color("86604a"), "nadadeira": Color("4a3524"), "comp": 0.9, "alt": 0.8, "linha": false, "barbilhoes": true},
 ]
 
 # multiplicação: numa rodada todos os peixes são da mesma espécie e pesam o mesmo
@@ -110,6 +111,9 @@ func _nova_rodada(avisar: bool = true):
 		rodada_mudou.emit()
 
 # ---------- pescaria ----------
+func pode_pescar() -> bool:
+	return peixes_pescaria_atual.size() < MAX_PEIXES_TARRAFA
+	
 func registrar_peixe(nome: String, peso: float):
 	peixes_pescaria_atual.append({"nome": nome, "peso": peso})
 	pescaria_mudou.emit()
@@ -118,7 +122,6 @@ func finalizar_pescaria():
 	if peixes_pescaria_atual.is_empty():
 		return
 		
-	# Fixa a espécie usável atual no momento da captura
 	var especie_usada = especie_rodada if modo == "multiplicacao" and not especie_rodada.is_empty() else especies[0]
 	
 	var total_peso := 0.0
@@ -268,7 +271,6 @@ func gerar_opcoes() -> Array:
 		if not repetido:
 			distratores.append(c)
 			
-	# Proteção caso faltem distratores (evita crash de índice)
 	while distratores.size() < 2:
 		distratores.append(snappedf(resposta_correta + (distratores.size() + 1) * passo_opcoes, 0.1))
 

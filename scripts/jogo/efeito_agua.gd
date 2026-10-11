@@ -1,7 +1,6 @@
 class_name EfeitoAgua
 extends Node
 
-# Cria círculos que se abrem na água e gotas que saltam. 'pos' é a posição no espaço do nó 'pai'.
 static func respingo(pai: Node, pos: Vector3, escala: float = 1.0):
 	if pai == null or not pai.is_inside_tree():
 		return

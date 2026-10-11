@@ -6,25 +6,21 @@ var label_primeira: Label
 var label_rodada: Label
 
 func _ready():
-	label_tarrafa = _criar_label(Vector2(20, 520), 22)
-	label_primeira = _criar_label(Vector2(20, 486), 22)
-	label_rodada = _criar_label(Vector2(20, 56), 24)
-	label_rodada.add_theme_color_override("font_color", Color("ffd978"))
+	label_tarrafa = _novo_label(22, Vector2(20, 520), Color.WHITE)
+	label_primeira = _novo_label(22, Vector2(20, 462), Color("ffd978"))
+	label_rodada = _novo_label(24, Vector2(20, 76), Color("ffd978"))
 	GameManager.pescaria_mudou.connect(_atualizar)
 	GameManager.rodada_mudou.connect(_atualizar)
 	_atualizar()
 
-func _criar_label(pos: Vector2, tam: int) -> Label:
+func _novo_label(tamanho: int, pos: Vector2, cor: Color) -> Label:
 	var l := Label.new()
-	l.position = pos
-	l.add_theme_font_size_override("font_size", tam)
-	l.add_theme_color_override("font_color", Color.WHITE)
-	l.add_theme_color_override("font_outline_color", Color("2d1b0e"))
-	l.add_theme_constant_override("outline_size", 6)
-	add_child(l)
+	EstiloUI.rotulo(l, tamanho, cor, 4)
+	EstiloUI.placa(self, l, pos)
 	return l
 
 func _atualizar():
+
 	var itens := PackedStringArray()
 	for p in GameManager.peixes_pescaria_atual:
 		itens.append("%s %s" % [p["nome"], GameManager.fmt_kg(p["peso"])])

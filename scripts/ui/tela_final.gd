@@ -31,6 +31,11 @@ func _label(texto: String, pos: Vector2, tam: Vector2, tamanho_fonte: int, cor: 
 	l.add_theme_color_override("font_color", cor)
 	l.add_theme_color_override("font_outline_color", Color("2d1b0e"))
 	l.add_theme_constant_override("outline_size", 6)
+	
+	var f := EstiloUI.fonte()
+	if f:
+		l.add_theme_font_override("font", f)
+		
 	return l
 
 func _estrela(centro: Vector2, raio: float, cheia: bool) -> Node2D:
@@ -73,7 +78,7 @@ func _mostrar():
 	var painel := Panel.new()
 	painel.size = Vector2(640, 440)
 	painel.position = Vector2((largura - 640) / 2.0, (altura - 440) / 2.0)
-	painel.add_theme_stylebox_override("panel", _estilo())
+	EstiloUI.painel(painel)
 	add_child(painel)
 
 	var total: int = GameManager.LIMITE_DESAFIOS
@@ -102,7 +107,7 @@ func _mostrar():
 	de_novo.text = "Jogar de novo"
 	de_novo.size = Vector2(240, 56)
 	de_novo.position = Vector2(50, 360)
-	de_novo.add_theme_font_size_override("font_size", 24)
+	EstiloUI.botao(de_novo, 26)
 	de_novo.pressed.connect(func(): get_tree().reload_current_scene())
 	painel.add_child(de_novo)
 
@@ -110,7 +115,7 @@ func _mostrar():
 	voltar.text = "Voltar ao menu"
 	voltar.size = Vector2(240, 56)
 	voltar.position = Vector2(350, 360)
-	voltar.add_theme_font_size_override("font_size", 24)
+	EstiloUI.botao(voltar, 26)
 	voltar.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/MenuInicial.tscn"))
 	painel.add_child(voltar)
 	de_novo.grab_focus()

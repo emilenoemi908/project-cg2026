@@ -1,6 +1,6 @@
 res://scenes/Jogo3D.tscn
-res://scripts/efeito_agua.gd
 res://scripts/GameManager.gd
-res://scripts/tela_final.gd
-res://scripts/jogo_3d.gd
 res://scripts/peixe_3d.gd
+res://scenes/MenuInicial.tscn
+res://scenes/menuInicial.tscn
+res://scenes/jogo3D.tscn

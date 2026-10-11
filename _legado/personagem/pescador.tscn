@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bg75i88b5u080"]
 
-[ext_resource type="Script" uid="uid://celtb2glqky78" path="res://scenes/personagem/pescador.gd" id="1_spt4x"]
+[ext_resource type="Script" uid="uid://celtb2glqky78" path="res://_legado/personagem/pescador.gd" id="1_spt4x"]
 [ext_resource type="AudioStream" uid="uid://d37hve4xn2ur4" path="res://assets/sons/som_lancar.ogg" id="2_5h5hq"]
 [ext_resource type="AudioStream" uid="uid://ddsqbx73d3xua" path="res://assets/sons/som_pescar.ogg" id="3_3rf5g"]
 
