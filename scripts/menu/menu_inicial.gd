@@ -37,6 +37,10 @@ func _ready():
 	botao_mult.pressed.connect(func(): iniciar("multiplicacao"))
 	botao_meta.pressed.connect(func(): iniciar("meta"))
 
+	# Se existir assets/sons/musica_menu.(ogg/mp3/wav) ela toca aqui; senão, a música do jogo.
+	Trilha.tocar_musica("musica_menu", "musica_jogo")
+	add_child(ControleSom.new())
+
 func _carregar_fonte() -> Font:
 	var caminho := "res://assets/fonts/LilitaOne-Regular.ttf"
 	if ResourceLoader.exists(caminho):
