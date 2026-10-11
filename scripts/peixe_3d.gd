@@ -2,6 +2,7 @@ class_name Peixe3D
 extends Area3D
 
 const LIMITE_X := 9.0
+const DUR_PULO := 0.8
 
 var especie: Dictionary = {}
 var peso: float = 0.5
@@ -11,6 +12,10 @@ var fase := 0.0
 var velocidade := 0.8
 var amplitude := 1.2
 
+var pulando := false
+var t_pulo := 0.0
+var proximo_pulo := 8.0
+
 var corpo_visual: Node3D = null
 var pivo_rabo: Node3D = null
 var rotulo: Label3D = null
@@ -19,6 +24,7 @@ func _ready():
 	fase = randf() * TAU
 	velocidade = randf_range(0.5, 1.0)
 	amplitude = randf_range(0.8, 1.8)
+	proximo_pulo = randf_range(4.0, 12.0)
 	base = position
 
 	var col := CollisionShape3D.new()
@@ -123,12 +129,33 @@ func _montar_visual():
 		olho.material_override = _mat(Color("1a1a1a"))
 		corpo_visual.add_child(olho)
 
+func _respingo():
+	EfeitoAgua.respingo(get_parent(), Vector3(global_position.x, 0.0, global_position.z), 0.7)
+
 func _process(delta):
 	tempo += delta
 	var s := sin(tempo * velocidade + fase)
 	var ds := cos(tempo * velocidade + fase)
 	position.x = base.x + s * amplitude
-	position.y = base.y + sin(tempo * 2.0 + fase) * 0.05
+
+	var salto := 0.0
+	if pulando:
+		t_pulo += delta
+		var u := t_pulo / DUR_PULO
+		if u >= 1.0:
+			pulando = false
+			corpo_visual.rotation.z = 0.0
+			proximo_pulo = tempo + randf_range(6.0, 15.0)
+			_respingo()
+		else:
+			salto = sin(u * PI) * 1.3
+			corpo_visual.rotation.z = cos(u * PI) * 0.7
+	elif visible and tempo >= proximo_pulo:
+		pulando = true
+		t_pulo = 0.0
+		_respingo()
+
+	position.y = base.y + sin(tempo * 2.0 + fase) * 0.05 + salto
 	var alvo := 0.0 if ds > 0.0 else PI
 	corpo_visual.rotation.y = lerp_angle(corpo_visual.rotation.y, alvo, 6.0 * delta)
 	pivo_rabo.rotation_degrees.y = sin(tempo * 9.0 + fase) * 25.0
@@ -143,11 +170,13 @@ func _reaparecer():
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
 	visible = false
+	pulando = false
 	await get_tree().create_timer(randf_range(1.5, 3.0)).timeout
 	_sortear()
 	base = Vector3(randf_range(-LIMITE_X, LIMITE_X), 0.02, randf_range(-3.0, -6.0))
 	position = base
 	tempo = 0.0
+	proximo_pulo = randf_range(4.0, 12.0)
 	visible = true
 	set_deferred("monitoring", true)
 	set_deferred("monitorable", true)

@@ -6,6 +6,10 @@ signal meta_mudou
 signal meta_atingida
 signal pescaria_mudou
 signal rodada_mudou
+signal acerto_feito
+signal ultimo_respondido
+
+const LIMITE_DESAFIOS := 8
 
 var modo: String = "soma_subtracao"
 
@@ -34,7 +38,11 @@ var passo_opcoes: float = 0.5
 var erro_tipico: float = -1.0
 var enunciado: String = ""
 var explicacao: String = ""
+
 var acertos: int = 0
+var acertos_perguntas: int = 0
+var respondidos: int = 0
+var acabou: bool = false
 
 # meta de pesca
 var meta_tipo: String = "peso"
@@ -61,6 +69,7 @@ func texto_opcao(v: float) -> String:
 	if unidade_resposta == "kg_int":
 		return "%d kg" % int(round(v))
 	return fmt_kg(v)
+
 # ---------- início ----------
 func reiniciar():
 	peixes_pescaria_atual.clear()
@@ -68,11 +77,17 @@ func reiniciar():
 	pescaria_b = {}
 	tem_pescaria_a = false
 	acertos = 0
-	especie_rodada = {}
+	acertos_perguntas = 0
+	respondidos = 0
+	acabou = false
 	enunciado = ""
 	explicacao = ""
-	if modo == "meta":
+	
+	if modo == "multiplicacao":
+		_nova_rodada(false)
+	elif modo == "meta":
 		sortear_meta()
+		
 	placar_mudou.emit()
 
 # ---------- espécies ----------
@@ -102,10 +117,21 @@ func registrar_peixe(nome: String, peso: float):
 func finalizar_pescaria():
 	if peixes_pescaria_atual.is_empty():
 		return
+		
+	# Fixa a espécie usável atual no momento da captura
+	var especie_usada = especie_rodada if modo == "multiplicacao" and not especie_rodada.is_empty() else especies[0]
+	
 	var total_peso := 0.0
 	for p in peixes_pescaria_atual:
 		total_peso += float(p["peso"])
-	var pescaria := {"quantidade": peixes_pescaria_atual.size(), "peso": snappedf(total_peso, 0.1)}
+		
+	var pescaria := {
+		"quantidade": peixes_pescaria_atual.size(), 
+		"peso": snappedf(total_peso, 0.1),
+		"especie_nome": especie_usada.get("nome", "Peixe"),
+		"especie_plural": especie_usada.get("plural", "peixes")
+	}
+	
 	peixes_pescaria_atual.clear()
 	pescaria_mudou.emit()
 
@@ -212,6 +238,8 @@ func _processar_meta(pescaria: Dictionary):
 		erro_tipico = meta_valor
 		enunciado = "Meta do dia: %s.\nVocê pescou %s e passou da meta.\nQuanto passou?" % [texto_valor(meta_valor), texto_valor(meta_acumulado)]
 		explicacao = "%s - %s = %s" % [texto_valor(meta_acumulado), texto_valor(meta_valor), texto_valor(resposta_correta)]
+		# Dica de correção de furo anterior: se desejar resetar o acumulado somente após responder, 
+		# você pode mover essa linha para o método de verificação, ou mantê-la aqui se o fluxo exigir.
 		meta_acumulado = 0.0
 		meta_mudou.emit()
 		desafio_pronto.emit()
@@ -221,6 +249,7 @@ func gerar_opcoes() -> Array:
 	var distratores: Array = []
 	if erro_tipico >= 0.0 and not is_equal_approx(erro_tipico, resposta_correta):
 		distratores.append(erro_tipico)
+	
 	var candidatas: Array = []
 	for k in range(1, 5):
 		candidatas.append(snappedf(resposta_correta + k * passo_opcoes, 0.1))
@@ -228,6 +257,7 @@ func gerar_opcoes() -> Array:
 		if abaixo >= 0.0:
 			candidatas.append(abaixo)
 	candidatas.shuffle()
+	
 	for c in candidatas:
 		if distratores.size() >= 2:
 			break
@@ -237,13 +267,24 @@ func gerar_opcoes() -> Array:
 				repetido = true
 		if not repetido:
 			distratores.append(c)
+			
+	# Proteção caso faltem distratores (evita crash de índice)
+	while distratores.size() < 2:
+		distratores.append(snappedf(resposta_correta + (distratores.size() + 1) * passo_opcoes, 0.1))
+
 	var lista: Array = [resposta_correta, distratores[0], distratores[1]]
 	lista.shuffle()
 	return lista
 
 func verificar_resposta(valor: float) -> bool:
 	var correto := is_equal_approx(valor, resposta_correta)
+	respondidos += 1
 	if correto:
 		acertos += 1
-		placar_mudou.emit()
+		acertos_perguntas += 1
+		acerto_feito.emit()
+	placar_mudou.emit()
+	if respondidos >= LIMITE_DESAFIOS and not acabou:
+		acabou = true
+		ultimo_respondido.emit()
 	return correto
