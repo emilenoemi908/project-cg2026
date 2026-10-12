@@ -192,4 +192,4 @@ func _process(delta):
 
 func iniciar(modo_escolhido: String):
 	GameManager.modo = modo_escolhido
-	get_tree().change_scene_to_file("res://scenes/Jogo3D.tscn")
+	get_tree().change_scene_to_file("res://scenes/jogo3D.tscn")

@@ -8,13 +8,13 @@ signal pescaria_mudou
 signal rodada_mudou
 signal acerto_feito
 signal ultimo_respondido
+signal conta_extra_respondida 
 
 const LIMITE_DESAFIOS := 8
 const MAX_PEIXES_TARRAFA := 5
 
 var modo: String = "soma_subtracao"
 
-# Os pesos são DIDÁTICOS (múltiplos de 0,5 kg), escolhidos para facilitar as contas.
 var especies: Array = [
 	{"nome": "Tainha", "plural": "tainhas", "pesos": [1.0, 1.5, 2.0], "cor": Color("5f8fb0"), "nadadeira": Color("2f5f82"), "comp": 1.15, "alt": 1.0, "linha": false, "barbilhoes": false},
 	{"nome": "Curimã", "plural": "curimãs", "pesos": [0.5, 1.0], "cor": Color("86b36a"), "nadadeira": Color("e3b83a"), "comp": 1.0, "alt": 1.0, "linha": false, "barbilhoes": false},
@@ -23,7 +23,6 @@ var especies: Array = [
 	{"nome": "Mandim", "plural": "mandins", "pesos": [0.5], "cor": Color("86604a"), "nadadeira": Color("4a3524"), "comp": 0.9, "alt": 0.8, "linha": false, "barbilhoes": true},
 ]
 
-# multiplicação: numa rodada todos os peixes são da mesma espécie e pesam o mesmo
 var especie_rodada: Dictionary = {}
 var peso_rodada: float = 1.0
 
@@ -39,6 +38,17 @@ var passo_opcoes: float = 0.5
 var erro_tipico: float = -1.0
 var enunciado: String = ""
 var explicacao: String = ""
+
+# ---------- pesca surpresa ----------
+const SURPRESAS_MAX := 2                 # no máximo 2 por partida
+const SURPRESA_PRIMEIRA := [3, 5]        
+const SURPRESA_INTERVALO := [4, 6]      
+var pescarias_com_captura: int = 0
+var surpresas_feitas: int = 0
+var proxima_surpresa: int = 0
+var extra_ativa: bool = false
+var extras_total: int = 0
+var extras_certas: int = 0
 
 var acertos: int = 0
 var acertos_perguntas: int = 0
@@ -83,6 +93,12 @@ func reiniciar():
 	acabou = false
 	enunciado = ""
 	explicacao = ""
+	pescarias_com_captura = 0
+	surpresas_feitas = 0
+	proxima_surpresa = randi_range(SURPRESA_PRIMEIRA[0], SURPRESA_PRIMEIRA[1])
+	extra_ativa = false
+	extras_total = 0
+	extras_certas = 0
 	
 	if modo == "multiplicacao":
 		_nova_rodada(false)
@@ -218,33 +234,38 @@ func _processar_meta(pescaria: Dictionary):
 	var ganho: float = float(pescaria["quantidade"])
 	if meta_tipo == "peso":
 		ganho = pescaria["peso"]
+		
 	meta_acumulado += ganho
 	meta_mudou.emit()
 
-	if is_equal_approx(meta_acumulado, meta_valor):
+	if deve_ter_surpresa():
+		registrar_surpresa()
+		var bonus_quantidade := 1.0
+		var bonus_peso := 0.5
+		var ganho_surpresa = bonus_quantidade if meta_tipo == "quantidade" else bonus_peso
+		meta_acumulado += ganho_surpresa
+		meta_mudou.emit()
+
+	if is_equal_approx(meta_acumulado, meta_valor) or meta_acumulado > meta_valor:
 		acertos += 1
+		acertos_perguntas += 1
+		respondidos += 1
+		acerto_feito.emit()
 		placar_mudou.emit()
 		meta_atingida.emit()
-		sortear_meta()
-	elif meta_acumulado < meta_valor:
+		
+		if respondidos >= LIMITE_DESAFIOS and not acabou:
+			acabou = true
+			ultimo_respondido.emit()
+		else:
+			sortear_meta()
+	else:
 		operacao = "falta"
 		_formato_meta()
 		resposta_correta = meta_valor - meta_acumulado
 		erro_tipico = meta_acumulado
 		enunciado = "Meta do dia: %s.\nVocê já pescou %s.\nQuanto falta para a meta?" % [texto_valor(meta_valor), texto_valor(meta_acumulado)]
 		explicacao = "%s - %s = %s" % [texto_valor(meta_valor), texto_valor(meta_acumulado), texto_valor(resposta_correta)]
-		desafio_pronto.emit()
-	else:
-		operacao = "excesso"
-		_formato_meta()
-		resposta_correta = meta_acumulado - meta_valor
-		erro_tipico = meta_valor
-		enunciado = "Meta do dia: %s.\nVocê pescou %s e passou da meta.\nQuanto passou?" % [texto_valor(meta_valor), texto_valor(meta_acumulado)]
-		explicacao = "%s - %s = %s" % [texto_valor(meta_acumulado), texto_valor(meta_valor), texto_valor(resposta_correta)]
-		# Dica de correção de furo anterior: se desejar resetar o acumulado somente após responder, 
-		# você pode mover essa linha para o método de verificação, ou mantê-la aqui se o fluxo exigir.
-		meta_acumulado = 0.0
-		meta_mudou.emit()
 		desafio_pronto.emit()
 
 # ---------- opções de resposta ----------
@@ -278,8 +299,67 @@ func gerar_opcoes() -> Array:
 	lista.shuffle()
 	return lista
 
+# ---------- pesca surpresa: quando acontece e a conta extra ----------
+func deve_ter_surpresa() -> bool:
+	pescarias_com_captura += 1
+	if surpresas_feitas >= SURPRESAS_MAX:
+		return false
+	return pescarias_com_captura >= proxima_surpresa
+
+func registrar_surpresa():
+	surpresas_feitas += 1
+	proxima_surpresa = pescarias_com_captura + randi_range(SURPRESA_INTERVALO[0], SURPRESA_INTERVALO[1])
+
+func gerar_conta_extra(especie: Dictionary, peso_antes: float):
+	var nome := String(especie["nome"])
+	var n_peso := float(especie["peso"])
+	var q := int(especie["quantidade"])
+	unidade_resposta = "kg"
+	passo_opcoes = 0.5
+	extra_ativa = true
+	var inicio := "Conta extra! "
+
+	var tipo := "multiplicacao"
+	if modo != "multiplicacao":
+		tipo = "soma" if randi() % 2 == 0 else "subtracao"
+
+	if tipo == "multiplicacao":
+		var n := randi_range(2, 3) if q > 1 else randi_range(2, 4)
+		var plural := String(especie.get("plural", nome.to_lower()))
+		operacao = "extra_multiplicacao"
+		resposta_correta = snappedf(n * n_peso, 0.1)
+		erro_tipico = snappedf(n + n_peso, 0.1)
+		enunciado = inicio + "Se você achasse %d %s iguais a este, de %s cada, quantos quilos seriam ao todo?" % [n, plural, fmt_kg(n_peso)]
+		explicacao = "%d x %s = %s" % [n, fmt_kg(n_peso), fmt_kg(resposta_correta)]
+	elif tipo == "soma":
+		operacao = "extra_soma"
+		resposta_correta = snappedf(peso_antes + n_peso, 0.1)
+		erro_tipico = snappedf(absf(peso_antes - n_peso), 0.1)
+		enunciado = inicio + "Na tarrafa havia %s. Você achou %s (%s). Quantos quilos há agora?" % [fmt_kg(peso_antes), nome, fmt_kg(n_peso)]
+		explicacao = "%s + %s = %s" % [fmt_kg(peso_antes), fmt_kg(n_peso), fmt_kg(resposta_correta)]
+	else:
+		var total := snappedf(peso_antes + n_peso, 0.1)
+		operacao = "extra_subtracao"
+		resposta_correta = snappedf(peso_antes, 0.1)
+		erro_tipico = total
+		enunciado = inicio + "Com %s (%s), a tarrafa ficou com %s. Quantos quilos havia antes do achado?" % [nome, fmt_kg(n_peso), fmt_kg(total)]
+		explicacao = "%s - %s = %s" % [fmt_kg(total), fmt_kg(n_peso), fmt_kg(resposta_correta)]
+	if erro_tipico <= 0.0:
+		erro_tipico = -1.0
+	desafio_pronto.emit()
+
 func verificar_resposta(valor: float) -> bool:
 	var correto := is_equal_approx(valor, resposta_correta)
+	if extra_ativa:
+		extra_ativa = false
+		extras_total += 1
+		if correto:
+			extras_certas += 1
+			acertos += 1
+			acerto_feito.emit()
+		placar_mudou.emit()
+		conta_extra_respondida.emit()
+		return correto
 	respondidos += 1
 	if correto:
 		acertos += 1

@@ -73,8 +73,8 @@ static func caixa_painel() -> StyleBoxFlat:
 
 static func painel(c: Control):
 	c.add_theme_stylebox_override("panel", caixa_painel())
-
-# Placa de madeira translúcida atrás de um texto do HUD. Deixa os cliques passarem para o jogo.
+	
+	
 static func placa(pai: Node, l: Label, pos: Vector2) -> PanelContainer:
 	var pc := PanelContainer.new()
 	pc.position = pos

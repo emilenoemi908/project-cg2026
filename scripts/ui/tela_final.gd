@@ -75,9 +75,12 @@ func _mostrar():
 	fundo.size = Vector2(largura, altura)
 	add_child(fundo)
 
+	var alt_painel := 440.0
+	if GameManager.extras_total > 0:
+		alt_painel += 32.0
 	var painel := Panel.new()
-	painel.size = Vector2(640, 440)
-	painel.position = Vector2((largura - 640) / 2.0, (altura - 440) / 2.0)
+	painel.size = Vector2(640, alt_painel)
+	painel.position = Vector2((largura - 640) / 2.0, (altura - alt_painel) / 2.0)
 	EstiloUI.painel(painel)
 	add_child(painel)
 
@@ -99,6 +102,9 @@ func _mostrar():
 	if GameManager.modo == "meta":
 		painel.add_child(_label("Metas atingidas: %d" % metas, Vector2(0, 135), Vector2(640, 36), 24, Color.WHITE))
 		y_msg = 175.0
+	if GameManager.extras_total > 0:
+		painel.add_child(_label("Conta extra da surpresa: %d de %d" % [GameManager.extras_certas, GameManager.extras_total], Vector2(0, y_msg - 4), Vector2(640, 32), 22, Color("ffd978")))
+		y_msg += 32.0
 	for i in 3:
 		painel.add_child(_estrela(Vector2(220 + i * 100, y_msg + 70), 40.0, i < estrelas))
 	painel.add_child(_label(mensagens[estrelas], Vector2(20, y_msg + 130), Vector2(600, 40), 22, Color.WHITE))
@@ -106,7 +112,7 @@ func _mostrar():
 	var de_novo := Button.new()
 	de_novo.text = "Jogar de novo"
 	de_novo.size = Vector2(240, 56)
-	de_novo.position = Vector2(50, 360)
+	de_novo.position = Vector2(50, alt_painel - 80)
 	EstiloUI.botao(de_novo, 26)
 	de_novo.pressed.connect(func(): get_tree().reload_current_scene())
 	painel.add_child(de_novo)
@@ -114,8 +120,8 @@ func _mostrar():
 	var voltar := Button.new()
 	voltar.text = "Voltar ao menu"
 	voltar.size = Vector2(240, 56)
-	voltar.position = Vector2(350, 360)
+	voltar.position = Vector2(350, alt_painel - 80)
 	EstiloUI.botao(voltar, 26)
-	voltar.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/MenuInicial.tscn"))
+	voltar.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/menuInicial.tscn"))
 	painel.add_child(voltar)
 	de_novo.grab_focus()

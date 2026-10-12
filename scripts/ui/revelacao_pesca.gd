@@ -114,9 +114,9 @@ func _montar_interface():
 	painel.add_child(valor_label)
 
 	botao_continuar = Button.new()
-	botao_continuar.text = "Continuar"
-	botao_continuar.position = Vector2(170, 442)
-	botao_continuar.size = Vector2(220, 52)
+	botao_continuar.text = "Fazer a conta extra"
+	botao_continuar.position = Vector2(130, 442)
+	botao_continuar.size = Vector2(300, 52)
 	EstiloUI.botao(botao_continuar, 24)
 	botao_continuar.pressed.connect(_ao_continuar)
 	painel.add_child(botao_continuar)
@@ -152,14 +152,16 @@ func abrir(especie: Dictionary, com_bonus: bool) -> bool:
 	modelo_atual.add_child(modelo)
 
 	nome_label.text = String(especie["nome"])
+	# O número do cartão SEMPRE aparece: é ele que o jogador usa na conta extra.
+	var q := int(especie["quantidade"])
+	var texto: String
 	if com_bonus:
-		var q := int(especie["quantidade"])
-		var texto: String = "+" + GameManager.fmt_kg(float(especie["peso"]))
-		if q > 1:
-			texto += "   (vale %s)" % GameManager.fmt_peixes(q)
-		valor_label.text = texto
+		texto = "+" + GameManager.fmt_kg(float(especie["peso"]))
 	else:
-		valor_label.text = "Achado especial!"
+		texto = "Pesa " + GameManager.fmt_kg(float(especie["peso"]))
+	if q > 1:
+		texto += "   (vale %s)" % GameManager.fmt_peixes(q)
+	valor_label.text = texto
 
 	# Evita pular a tela sem querer com um duplo clique/Espaço.
 	botao_continuar.disabled = true
