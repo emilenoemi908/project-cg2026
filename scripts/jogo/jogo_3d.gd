@@ -2,6 +2,13 @@ extends Node3D
 
 @export var cena_ui_desafio: PackedScene
 
+const REVELACAO_SCRIPT = preload("res://scripts/ui/revelacao_pesca.gd")
+
+var especies_surpresa: Array = []
+var revelacao_pesca
+var _especie_extra: Dictionary = {}   
+var _peso_antes_extra := 0.0        
+
 # ---- ajustes rápidos ----
 const LIMITE_X := 9.0
 const VELOCIDADE := 6.0
@@ -127,6 +134,7 @@ func material_grama(escala: float) -> StandardMaterial3D:
 # ---------- inicialização ----------
 func _ready():
 	GameManager.reiniciar()
+	_montar_especies()
 	montar_ambiente()
 	montar_agua()
 	montar_cenario()
@@ -149,6 +157,16 @@ func _ready():
 	add_child(PainelMeta.new())
 	add_child(PainelTarrafa.new())
 	add_child(TelaFinal.new())
+
+	# Tela da pesca surpresa.
+	revelacao_pesca = REVELACAO_SCRIPT.new()
+	add_child(revelacao_pesca)
+	revelacao_pesca.continuar.connect(_continuar_apos_revelacao)
+	GameManager.conta_extra_respondida.connect(_depois_da_conta_extra)
+
+	var controle_som := ControleSom.new()
+	controle_som.posicao_y = 66.0
+	add_child(controle_som)
 
 func montar_ambiente():
 	var ceu := ProceduralSkyMaterial.new()
@@ -353,7 +371,6 @@ func montar_pescador():
 	for lado in [-1.0, 1.0]:
 		barco.add_child(criar_malha(capsula(0.08, 0.6), pele, Vector3(0.34 * lado, 0.55, -0.15), Vector3(-65, 0, 8.0 * lado)))
 
-	# tarrafa (área de detecção + visual)
 	tarrafa = Area3D.new()
 	tarrafa.add_to_group("area_pesca")
 	tarrafa.position = Vector3(0, 0.1, -4.5)
@@ -419,7 +436,7 @@ func montar_interface():
 	voltar.custom_minimum_size = Vector2(110, 44)
 	voltar.position = Vector2(get_viewport().get_visible_rect().size.x - 130, 14)
 	EstiloUI.botao(voltar, 22)
-	voltar.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/MenuInicial.tscn"))
+	voltar.pressed.connect(func(): get_tree().change_scene_to_file("res://scenes/menuInicial.tscn"))
 	hud.add_child(voltar)
 
 func atualizar_placar():
@@ -442,15 +459,7 @@ func montar_sons():
 			add_child(p)
 			sons[nome] = p
 
-	var musica := carregar_som("musica_fundo")
-	if musica:
-		if "loop" in musica:
-			musica.loop = true
-		var pm := AudioStreamPlayer.new()
-		pm.stream = musica
-		pm.volume_db = -10.0
-		add_child(pm)
-		pm.play()
+	Trilha.tocar_musica("musica_jogo")
 
 	var ambiente := carregar_som("ambiente_agua")
 	if ambiente:
@@ -518,12 +527,87 @@ func _respingo_tarrafa():
 func recolher_rede():
 	rede_lancada = false
 	tarrafa_colisao.disabled = true
-	GameManager.finalizar_pescaria()
 	if tween_rede:
 		tween_rede.kill()
 	tween_rede = create_tween()
 	tween_rede.tween_property(tarrafa_visual, "scale", Vector3(0.1, 1, 0.1), 0.3)
 	tween_rede.tween_callback(func(): tarrafa_visual.visible = false)
+
+	if _tentar_pesca_surpresa():
+		return
+	GameManager.finalizar_pescaria()
+
+# ---------- pesca surpresa ----------
+func _montar_especies():
+	especies_surpresa = [
+		{"nome": "Sururu", "nome_extra": "Sururu", "plural": "sururus", "arquivo": "clam.glb",
+			"peso": 0.5, "quantidade": 1, "chance": 22,
+			"escala": 0.045, "centro": Vector3(0, 0, 0)},
+		{"nome": "Camarão", "nome_extra": "Camarão", "plural": "camarões", "arquivo": "ebi_shrimp_rigged.glb",
+			"peso": 0.5, "quantidade": 1, "chance": 22,
+			"escala": 0.08, "centro": Vector3(0, 0.876, 2.006)},
+		{"nome": "Caranguejo", "nome_extra": "Caranguejo", "plural": "caranguejos", "arquivo": "crab.glb",
+			"peso": 1.5, "quantidade": 1, "chance": 14,
+			"escala": 0.16, "centro": Vector3(0, 2.407, 1.903)},
+		{"nome": "Ostra com Pérola", "nome_extra": "Pérola", "plural": "ostras com pérola", "arquivo": "stylized_oyster.glb",
+			"peso": 3.0, "quantidade": 3, "chance": 12,
+			"escala": 0.7, "centro": Vector3(0, 0.226, -0.08)},
+	]
+
+func _sortear_especie() -> Dictionary:
+	var total := 0
+	for e in especies_surpresa:
+		total += int(e["chance"])
+	var sorteio := randi_range(1, total)
+	for e in especies_surpresa:
+		sorteio -= int(e["chance"])
+		if sorteio <= 0:
+			return e
+	return especies_surpresa[0]
+
+func _tentar_pesca_surpresa() -> bool:
+	if GameManager.peixes_pescaria_atual.is_empty():
+		return false
+	if not GameManager.deve_ter_surpresa():
+		return false
+
+	var especie := _sortear_especie()
+	var peso_antes := _peso_na_tarrafa()
+
+	var com_bonus: bool = GameManager.modo != "multiplicacao"
+
+	if not revelacao_pesca.abrir(especie, com_bonus):
+		return false
+	GameManager.registrar_surpresa()
+	if com_bonus:
+		_registrar_bonus(especie)
+	_especie_extra = especie
+	_peso_antes_extra = peso_antes
+	jogando = false
+	return true
+
+func _peso_na_tarrafa() -> float:
+	var total := 0.0
+	for p in GameManager.peixes_pescaria_atual:
+		total += float(p["peso"])
+	return snappedf(total, 0.1)
+
+
+func _registrar_bonus(especie: Dictionary):
+	var q: int = int(especie["quantidade"])
+	var peso_unitario: float = float(especie["peso"]) / float(q)
+	for i in q:
+		var nome: String = String(especie["nome"]) if i == 0 else String(especie["nome_extra"])
+		GameManager.registrar_peixe(nome, peso_unitario)
+
+func _continuar_apos_revelacao():
+	GameManager.gerar_conta_extra(_especie_extra, _peso_antes_extra)
+
+func _depois_da_conta_extra():
+	await get_tree().create_timer(1.5).timeout
+	GameManager.finalizar_pescaria()
+	if not GameManager.acabou:
+		jogando = true
 
 func _ao_pescar(area: Area3D):
 	if area.has_method("capturar"):

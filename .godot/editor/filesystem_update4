@@ -1,6 +1,6 @@
-res://scenes/Jogo3D.tscn
-res://scripts/GameManager.gd
-res://scripts/peixe_3d.gd
-res://scenes/MenuInicial.tscn
-res://scenes/menuInicial.tscn
 res://scenes/jogo3D.tscn
+res://scripts/ui/controle_som.gd
+res://scripts/ui/estilo_ui.gd
+res://scripts/autoload/game_manager.gd
+res://scripts/jogo/jogo_3d.gd
+res://scripts/ui/painel_tarrafa.gd

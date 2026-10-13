@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.7", "Forward Plus")
 [autoload]
 
 GameManager="*uid://bnheitohpv08x"
+Trilha="*res://scripts/autoload/trilha.gd"
 
 [display]
 

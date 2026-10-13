@@ -65,9 +65,7 @@ func _descricao() -> String:
 		"multiplicacao":
 			return "Você é pescador na Lagoa Mundaú. Hoje só aparece uma espécie de peixe, e todos pesam o mesmo (veja no canto da tela). Lance a tarrafa, recolha, conte quantos peixes vieram e multiplique pelo peso de cada um." + comum
 		"meta":
-			return "A pescaria de hoje tem uma meta, em quilos ou em número de peixes (ela aparece no canto da tela). Cada vez que você recolhe a tarrafa, o que veio é somado ao total. Se ainda faltar, responda quanto falta. Se passar da meta, responda quanto passou e tente de novo. Se acertar a meta exata, você ganha um ponto e recebe uma nova meta." + comum
-		"sururu":
-			return "O sururu é o principal recurso pesqueiro da Lagoa Mundaú e patrimônio cultural de Alagoas. Ele é catado no fundo da lagoa em mergulhos, sem equipamento, e levado em latas. No jogo, um companheiro mergulha ao lado da canoa. Aperte Espaço ou clique para mergulhar e resolva a conta de cada mergulho.\n\nCada lata tem 20 kg de sururu com casca, e cerca da metade do peso vira carne depois do despinicar, quando as marisqueiras tiram o molusco da casca. Esses valores são aproximados e servem para as contas.\n\nControles: setas movem o barco; Espaço ou clique fazem o mergulho."
+			return "A pescaria de hoje tem uma meta, em quilos ou em número de peixes (ela aparece no canto da tela). Cada vez que você recolhe a tarrafa, o que veio é somado ao total. Se ainda faltar, responda quanto falta. Se passar da meta, responda quanto passou e tente de novo. Se acertar a meta exata, você ganha um ponto e recebe uma nova meta."
 		_:
 			return "Você é pescador na Lagoa Mundaú. Lance a tarrafa sobre os peixes e recolha. Depois de duas pescarias, vamos comparar os pesos das tarrafas: some ou subtraia para achar o resultado e escolha a resposta certa." + comum
 
