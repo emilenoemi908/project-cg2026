@@ -23,7 +23,7 @@ Jogo educativo desenvolvido na **Godot Engine 4** para a disciplina de Computaç
 | Ação | Teclado | Mouse |
 |---|---|---|
 | Mover o barco | Setas esquerda e direita | |
-| Lançar e recolher a tarrafa (ou mergulhar, no modo Sururu) | Enter ou Espaço | Clique na cena |
+| Lançar e recolher a tarrafa| Enter ou Espaço | Clique na cena |
 | Escolher o modo, responder, jogar de novo | Enter no botão em foco | Clique nos botões |
 
 ## Requisitos da disciplina e onde aparecem
@@ -79,5 +79,5 @@ Scripts principais:
 - Fonte **Lilita One**, de Juan Montoreano (SIL Open Font License).
 - Fundo, canoas, ícones e bolhas do menu: imagens geradas por script em Python (Pillow).
 - Som ambiente de água: sintetizado por script em Python (NumPy).
-- Música e demais sons: indicar aqui a origem de cada arquivo de `assets/sons`.
+- Música e demais sons:
 
